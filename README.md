@@ -87,7 +87,7 @@ Para colocar o sistema online:
 
 ## 📄 Documentação Online (Google Docs)
 
-https://docs.google.com/document/d/1nZZCuTt1yP35JgcCF8BM0kzLZD4t48lz5xLCV8eKo54/edit?tab=t.0
+[https://docs.google.com/document/d/1nZZCuTt1yP35JgcCF8BM0kzLZD4t48lz5xLCV8eKo54/edit?tab=t.0](https://docs.google.com/document/d/10ttjtH6XIEGrUIZEbtg748bn7q_YgG0iAu9CPboo78E/edit?usp=sharing)
 ---
 
 ## 📌 Quadro Kanban do Projeto
