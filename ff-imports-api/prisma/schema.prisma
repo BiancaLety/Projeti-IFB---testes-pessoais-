@@ -1,0 +1,64 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model administrador {
+  id_admin  Int      @id @default(autoincrement())
+  email     String   @unique(map: "uq_admin_email") @db.VarChar(200)
+  nome      String   @db.VarChar(150)
+  senha     String   @db.VarChar(255)
+  criado_em DateTime @default(now()) @db.DateTime(0)
+}
+
+model categoria {
+  id_categoria Int       @id @default(autoincrement())
+  nome         String    @unique(map: "uq_categoria_nome") @db.VarChar(100)
+  descricao    String?   @db.Text
+  icone_url    String?   @db.VarChar(300)
+  produto      produto[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model imagem_produto {
+  id_imagem  Int     @id @default(autoincrement())
+  id_produto Int
+  url_imagem String  @db.VarChar(500)
+  principal  Boolean @default(false)
+  ordem      Int     @default(1)
+  produto    produto @relation(fields: [id_produto], references: [id_produto], onDelete: Cascade, map: "fk_img_produto")
+
+  @@index([id_produto], map: "fk_img_produto")
+}
+
+model marca {
+  id_marca Int       @id @default(autoincrement())
+  nome     String    @unique(map: "uq_marca_nome") @db.VarChar(100)
+  logo_url String?   @db.VarChar(300)
+  produto  produto[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model produto {
+  id_produto     Int              @id @default(autoincrement())
+  nome           String           @db.VarChar(150)
+  descricao      String?          @db.Text
+  preco          Decimal          @db.Decimal(10, 2)
+  especificacoes String?          @db.Text
+  disponivel     Boolean          @default(true)
+  id_categoria   Int
+  id_marca       Int
+  criado_em      DateTime         @default(now()) @db.DateTime(0)
+  imagem_produto imagem_produto[]
+  categoria      categoria        @relation(fields: [id_categoria], references: [id_categoria], map: "fk_prod_cat")
+  marca          marca            @relation(fields: [id_marca], references: [id_marca], map: "fk_prod_marca")
+
+  @@index([id_categoria], map: "idx_produto_categoria")
+  @@index([disponivel], map: "idx_produto_disponivel")
+  @@index([id_marca], map: "idx_produto_marca")
+  @@index([nome], map: "idx_produto_nome")
+}
