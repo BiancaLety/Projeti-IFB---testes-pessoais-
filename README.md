@@ -117,7 +117,35 @@ O sistema F&F Imports tem como objetivo oferecer uma experiência moderna e prá
 - Estrutura preparada para futuras funcionalidades em JavaScript.
 
 ---
+## 🚀 Estado atual do sistema
 
+| Funcionalidade | Estado |
+| :--- | :--- |
+| Estrutura da API | Implementada |
+| Banco de dados MySQL | Implementado |
+| Modelagem das entidades | Implementada |
+| Prisma ORM | Implementado |
+| Autenticação de administrador | Implementada |
+| Hash de senhas | Implementado |
+| JWT | Implementado |
+| Middleware de autenticação | Implementado |
+| CRUD de produtos | Em desenvolvimento |
+| CRUD de categorias | Em desenvolvimento |
+| CRUD de marcas | Em desenvolvimento |
+| Gerenciamento de imagens | Em desenvolvimento |
+| Integração com frontend | Pendente |
+
+---
+
+## ⚙️ Instruções para rodar a API
+
+Para rodar o projeto localmente, execute os seguintes comandos no terminal:
+
+```bash
+npm install
+npx prisma db pull
+npx prisma generate
+npm run dev
 # 📄 Licença
 
 Este projeto foi desenvolvido para fins acadêmicos.
