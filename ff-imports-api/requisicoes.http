@@ -1,0 +1,119 @@
+###############################################################
+# FF Imports API - requisições de produtos
+#
+# Como usar:
+#   1. Instale a extensão "REST Client" (humao.rest-client) no VS Code
+#   2. Suba a API:  npm run dev
+#   3. Clique em "Send Request" acima de cada requisição, NA ORDEM:
+#      primeiro o LOGIN, depois CADASTRAR. As demais reaproveitam
+#      automaticamente o token e o id do produto cadastrado.
+#
+# IDs de exemplo (scripts/dadosExemplo.sql):
+#   Categorias: 9 = Smartphones | 10 = Notebooks | 11 = Acessórios
+#   Marcas:     9 = Apple       | 10 = Samsung   | 11 = Xiaomi
+###############################################################
+
+@baseUrl = http://localhost:3000/api
+@token = {{login.response.body.token}}
+@idProduto = {{cadastrar.response.body.produto.id_produto}}
+
+
+### 1) LOGIN - gera o token usado nas rotas protegidas
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+    "email": "admin@ffimports.com",
+    "senha": "123456"
+}
+
+
+### 2) CADASTRAR produto (requer token)
+# @name cadastrar
+POST {{baseUrl}}/produtos
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "nome": "iPhone 15 128GB",
+    "descricao": "Smartphone Apple com tela de 6,1 polegadas",
+    "preco": 4999.90,
+    "especificacoes": "128GB, 6GB RAM, câmera dupla 48MP",
+    "disponivel": true,
+    "id_categoria": 9,
+    "id_marca": 9
+}
+
+
+### 3) VISUALIZAR - listar produtos (público, não precisa de token)
+GET {{baseUrl}}/produtos
+
+
+### 4) EDITAR produto - altera vários campos (requer token)
+PUT {{baseUrl}}/produtos/{{idProduto}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "nome": "iPhone 15 256GB",
+    "preco": 5699.90,
+    "especificacoes": "256GB, 6GB RAM, câmera dupla 48MP"
+}
+
+
+### 5) EDITAR produto - só a disponibilidade (requer token)
+PUT {{baseUrl}}/produtos/{{idProduto}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "disponivel": false
+}
+
+
+### 6) EXCLUIR produto - exclusão lógica (requer token)
+DELETE {{baseUrl}}/produtos/{{idProduto}}
+Authorization: Bearer {{token}}
+
+
+### 7) VISUALIZAR de novo - o produto excluído não deve aparecer
+GET {{baseUrl}}/produtos
+
+
+###############################################################
+# Casos de erro (para conferir os códigos de resposta)
+###############################################################
+
+### Sem token -> 401
+PUT {{baseUrl}}/produtos/{{idProduto}}
+Content-Type: application/json
+
+{
+    "nome": "Teste"
+}
+
+
+### Preço negativo -> 400
+PUT {{baseUrl}}/produtos/{{idProduto}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "preco": -10
+}
+
+
+### Produto inexistente -> 404
+PUT {{baseUrl}}/produtos/999999
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "nome": "Teste"
+}
+
+
+### Excluir de novo o mesmo produto -> 409
+DELETE {{baseUrl}}/produtos/{{idProduto}}
+Authorization: Bearer {{token}}

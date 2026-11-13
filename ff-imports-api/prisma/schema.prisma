@@ -53,12 +53,15 @@ model produto {
   id_categoria   Int
   id_marca       Int
   criado_em      DateTime         @default(now()) @db.DateTime(0)
+  /// Data/hora da exclusão lógica (soft delete). NULL = produto ativo.
+  excluido_em    DateTime?        @db.DateTime(0)
   imagem_produto imagem_produto[]
   categoria      categoria        @relation(fields: [id_categoria], references: [id_categoria], map: "fk_prod_cat")
   marca          marca            @relation(fields: [id_marca], references: [id_marca], map: "fk_prod_marca")
 
   @@index([id_categoria], map: "idx_produto_categoria")
   @@index([disponivel], map: "idx_produto_disponivel")
+  @@index([excluido_em], map: "idx_produto_excluido_em")
   @@index([id_marca], map: "idx_produto_marca")
   @@index([nome], map: "idx_produto_nome")
 }
